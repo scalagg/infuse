@@ -1,26 +1,99 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+    id "maven-publish"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "org.jetbrains.kotlin.jvm" version "$kotlinVersion"
+    id "org.jetbrains.kotlin.kapt" version "$kotlinVersion"
 }
 
-group = 'gg.scala'
-version = '1.0-SNAPSHOT'
+allprojects {
+    group "gg.scala.infuse"
+    version "1.0.0"
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+
+        maven {
+            url "${property("artifactory_contextUrl")}/gradle-release"
+
+            credentials {
+                setUsername(
+                    property("artifactory_user")
+                )
+                setPassword(
+                    property("artifactory_password")
+                )
+            }
+        }
+
+        maven { url "https://jitpack.io" }
+        maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    }
 }
 
-dependencies {
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
-}
+subprojects {
+    apply plugin: "maven-publish"
+    apply plugin: "com.github.johnrengelman.shadow"
 
-test {
-    useJUnitPlatform()
-}
+    apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: "org.jetbrains.kotlin.kapt"
 
-compileKotlin {
-    kotlinOptions.jvmTarget = '1.8'
-}
+    dependencies {
+        compileOnly "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-compileTestKotlin {
-    kotlinOptions.jvmTarget = '1.8'
+        if (project.name != "commons") {
+            implementation project(":commons")
+            compileOnly "gg.scala.store:${project.name}:$storeVersion"
+        } else {
+            compileOnly "gg.scala.store:shared:$storeVersion"
+        }
+
+        compileOnly "com.github.liftgate:lease:$leaseVersion"
+
+        compileOnly "gg.scala.commons:commons:$commonsVersion"
+        compileOnly "gg.scala.commons:serializers:$commonsVersion"
+    }
+
+    compileKotlin {
+        kotlinOptions.javaParameters = true
+        kotlinOptions.jvmTarget = "17"
+    }
+
+    shadowJar {
+        archiveClassifier.set("")
+
+        exclude "**/*.kotlin_metadata"
+        exclude "**/*.kotlin_module"
+        exclude "**/*.kotlin_builtins"
+
+        exclude "META-INF/"
+        exclude "**/kotlin/**"
+
+        archiveFileName.set("infuse-${project.name}.jar")
+    }
+
+    publishing {
+        publications {
+            shadow(MavenPublication) { publication ->
+                project.shadow.component(publication)
+            }
+        }
+
+        repositories {
+            maven {
+                name "liftgate"
+                url "${property("artifactory_contextUrl")}/gradle-release"
+
+                credentials {
+                    username property("artifactory_user")
+                    password property("artifactory_password")
+                }
+            }
+        }
+    }
+
+    tasks.build.dependsOn(
+        shadowJar,
+        publishShadowPublicationToLiftgateRepository
+    )
 }

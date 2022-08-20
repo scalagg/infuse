@@ -1,0 +1,8 @@
+repositories {
+    maven { url "https://nexus.velocitypowered.com/repository/maven-public/" }
+}
+
+dependencies {
+    compileOnly "com.velocitypowered:velocity-api:$velocityVersion"
+    kapt "com.velocitypowered:velocity-api:$velocityVersion"
+}

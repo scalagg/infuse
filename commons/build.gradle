@@ -1,0 +1,13 @@
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compileOnly "com.google.code.gson:gson:$gsonVersion"
+
+    compileOnly "gg.scala.aware:aware:1.0.8.3"
+    compileOnly "gg.scala.flavor:flavor:0.1.3.8"
+
+    compileOnly "net.kyori:adventure-api:$adventureVersion"
+    compileOnly "net.kyori:adventure-platform-api:$adventurePlatformVersion"
+
+    compileOnly "net.kyori:adventure-text-minimessage:$adventureVersion"
+    compileOnly "net.kyori:adventure-text-serializer-legacy:$adventureVersion"
+}

@@ -20,7 +20,7 @@ import gg.scala.infuse.commons.rank.RankCommunicator
 object CommunicationsService
 {
     @Inject
-    lateinit var platform: InfusePlatform
+    lateinit var platform: InfusePlatform<*>
 
     val aware by lazy {
         AwareBuilder.of<AwareMessage>("infuse")

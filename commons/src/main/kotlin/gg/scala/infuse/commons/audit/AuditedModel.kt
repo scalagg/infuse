@@ -5,6 +5,7 @@ import gg.scala.infuse.commons.config
 import gg.scala.infuse.commons.expiring.Expiring
 import java.time.Instant
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 /**
  * @author GrowlyX
@@ -13,22 +14,26 @@ import java.util.UUID
 abstract class AuditedModel(
     override val identifier: UUID,
     val appliedTo: UUID,
-    val appliedBy: UUID,
+    val appliedBy: UUID?,
     val appliedFor: String,
     val appliedScope: Set<String> =
         setOf("global"),
     appliedAt: Instant = Instant.now(),
-    val appliedAutomated: Boolean = false
+    val automated: Boolean = false
 ) : Expiring(appliedAt), IDataStoreObject
 {
     val appliedOn = config.identifier
 
-    val removedBy: UUID? = null
-    val removedOn: String? = null
-    val removedAt: Instant? = null
+    var removedBy: UUID? = null
+    var removedOn: String? = null
+    var removedFor: String? = null
+    var removedAt: Instant? = null
 
     val removed: Boolean
         get() = this.removedAt != null
+
+    val active: Boolean
+        get() = !removed && !hasExpired()
 
     fun customScope(): Boolean
     {
@@ -50,7 +55,17 @@ abstract class AuditedModel(
 
         return this.appliedScope
             .any {
-                it.equals(config.identifier, true)
+                it in config.groups
             }
+    }
+
+    open fun save(): CompletableFuture<Void>
+    {
+        return CompletableFuture.completedFuture(null)
+    }
+
+    open fun saveAndPushUpdates(): CompletableFuture<Void>
+    {
+        return CompletableFuture.completedFuture(null)
     }
 }

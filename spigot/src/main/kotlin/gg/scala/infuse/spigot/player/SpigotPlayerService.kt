@@ -27,7 +27,7 @@ object SpigotPlayerService : PlayerService<InfuseSpigotPlayer>(InfuseSpigotPlaye
                     .loadOptimalCopy(
                         it.uniqueId
                     ) {
-                        InfuseSpigotPlayer(it.uniqueId, it.name)
+                        InfuseSpigotPlayer(it.uniqueId, it.name, it.address.hostAddress)
                     }
                     .join()
             }

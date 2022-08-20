@@ -13,6 +13,7 @@ import gg.scala.infuse.spigot.player.SpigotPlayerService
 import me.lucko.helper.plugin.ap.Plugin
 import me.lucko.helper.plugin.ap.PluginDependency
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
+import kotlin.properties.Delegates
 
 /**
  * @author GrowlyX
@@ -33,6 +34,12 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences
 )
 class InfuseSpigot : ExtendedScalaPlugin(), InfusePlatform<InfuseSpigotPlayer>
 {
+    companion object
+    {
+        @JvmStatic
+        var instance by Delegates.notNull<InfuseSpigot>()
+    }
+
     override val audience = lazy {
         BukkitAudiences.create(this)
     }
@@ -49,6 +56,8 @@ class InfuseSpigot : ExtendedScalaPlugin(), InfusePlatform<InfuseSpigotPlayer>
     @ContainerEnable
     fun containerEnable()
     {
+        instance = this
+
         InfuseCommons.platform = this
         InfuseCommons.configure()
     }

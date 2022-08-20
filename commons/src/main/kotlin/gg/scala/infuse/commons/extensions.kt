@@ -18,7 +18,7 @@ val forever = ChronoUnit.FOREVER.duration!!
 val logger: Logger
     get() = platform.logging
 
-val platform: InfusePlatform
+val platform: InfusePlatform<*>
     get() = InfuseCommons.platform
 
 val config: InfuseGeneralConfig

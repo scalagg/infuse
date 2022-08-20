@@ -9,7 +9,10 @@ import gg.scala.infuse.commons.config
 import gg.scala.infuse.commons.message
 import gg.scala.infuse.commons.rank.metadata.RankMetadata
 import gg.scala.infuse.commons.rank.metadata.RankMetadataContainer
+import gg.scala.infuse.commons.rank.metadata.defaults.ColorMetadata
+import gg.scala.infuse.commons.rank.metadata.defaults.DisplayNameMetadata
 import gg.scala.infuse.commons.reference.impl.RankReference
+import net.kyori.adventure.text.Component
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
@@ -72,6 +75,31 @@ data class InfuseRank(
         return compoundedPermissions
     }
 
+    fun getColoredName(
+        ignoreMinequest: Boolean = false
+    ): Component
+    {
+//        if (
+//            Lemon.instance.lemonWebData.serverName == "Minequest" &&
+//            !ignoreMinequest
+//        )
+//        {
+//            val mapping = MinequestLogic
+//                .byRank(this)
+//                ?: return getColoredName(true)
+//
+//            return MinequestLogic
+//                .getTranslatedName(
+//                    displayName ?: name, mapping
+//                ) ?: getColoredName(true)
+//        }
+
+        return this.metadata<ColorMetadata, Component>()
+            .append(
+                this.metadata<DisplayNameMetadata, Component>()
+            )
+    }
+
     private fun invalidate()
     {
         children.toList()
@@ -85,6 +113,8 @@ data class InfuseRank(
 
     private fun save(): CompletableFuture<Void>
     {
+        this.invalidate()
+
         return DataStoreObjectControllerCache.findNotNull<InfuseRank>()
             .save(this, DataStoreStorageType.MONGO)
     }

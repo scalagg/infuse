@@ -14,6 +14,7 @@ import gg.scala.infuse.commons.rank.metadata.defaults.DisplayNameMetadata
 import gg.scala.infuse.commons.rank.metadata.defaults.NameMetadata
 import gg.scala.infuse.commons.rank.metadata.defaults.VisibilityMetadata
 import gg.scala.infuse.commons.rank.metadata.defaults.WeightMetadata
+import gg.scala.infuse.commons.reference.impl.RankReference
 import gg.scala.infuse.commons.text
 import io.liftgate.lease.LeaseStrategy
 import io.liftgate.lease.lease
@@ -39,6 +40,7 @@ object RankService
         .map { it as Class<RankMetadata<*>> }
 
     fun available() = ranks.size
+    fun findAllRanks() = this.ranks.values.toList()
 
     @Configure
     fun configure()
@@ -63,6 +65,11 @@ object RankService
 
     fun findDefaultRank(): InfuseRank =
         this.findDefaultRankNullable()!!
+
+    fun findDefaultRankReference(): RankReference =
+        RankReference(
+            this.findDefaultRank().identifier
+        )
 
     fun findDefaultRankNullable(): InfuseRank? =
         this.ranks.values

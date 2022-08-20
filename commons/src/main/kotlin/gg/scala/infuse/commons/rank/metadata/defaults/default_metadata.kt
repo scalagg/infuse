@@ -22,7 +22,7 @@ class NameMetadata : DefaultMetadata<String>("Default")
 }
 
 @MetadataDefault
-class DisplayNameMetadata : MiniMessageMetadata(
+class DisplayNameMetadata : ComponentMetadata(
     Component.empty()
         .color(NamedTextColor.GRAY)
         .append(
@@ -38,7 +38,7 @@ class DisplayNameMetadata : MiniMessageMetadata(
 }
 
 @MetadataDefault
-class PrefixMetadata : MiniMessageMetadata(
+class PrefixMetadata : ComponentMetadata(
     Component.empty().color(NamedTextColor.GRAY)
 )
 {
@@ -50,7 +50,7 @@ class PrefixMetadata : MiniMessageMetadata(
 }
 
 @MetadataDefault
-class SuffixMetadata : MiniMessageMetadata(
+class SuffixMetadata : ComponentMetadata(
     Component.empty()
 )
 {
@@ -62,7 +62,7 @@ class SuffixMetadata : MiniMessageMetadata(
 }
 
 @MetadataDefault
-class ColorMetadata : MiniMessageMetadata(
+class ColorMetadata : ComponentMetadata(
     Component.empty().color(NamedTextColor.GRAY)
 )
 {

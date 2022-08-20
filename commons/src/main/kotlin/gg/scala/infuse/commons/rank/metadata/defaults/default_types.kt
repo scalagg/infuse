@@ -4,6 +4,7 @@ import gg.scala.infuse.commons.rank.metadata.RankMetadata
 import gg.scala.infuse.commons.rank.metadata.RankMetadataParseException
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 
 /**
  * @author GrowlyX
@@ -52,15 +53,15 @@ abstract class IntegerMetadata(
             )
 }
 
-abstract class MiniMessageMetadata(
+abstract class ComponentMetadata(
     private val defaultComponent: Component
 ) : DefaultMetadata<Component>(
     defaultComponent
 )
 {
     override fun parse(input: String) =
-        MiniMessage.miniMessage()
-            .deserialize(input)
+        LegacyComponentSerializer
+            .legacyAmpersand().deserialize(input)
 
     override fun reset()
     {

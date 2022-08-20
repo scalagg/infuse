@@ -2,7 +2,6 @@ package gg.scala.infuse.commons
 
 import gg.scala.flavor.Flavor
 import gg.scala.flavor.FlavorOptions
-import gg.scala.flavor.reflections.PackageIndexer
 import gg.scala.infuse.commons.rank.metadata.RankMetadata
 import gg.scala.infuse.commons.reference.Reference
 import net.evilblock.cubed.serializers.Serializers
@@ -15,7 +14,7 @@ import kotlin.properties.Delegates
  */
 object InfuseCommons
 {
-    var platform by Delegates.notNull<InfusePlatform>()
+    var platform by Delegates.notNull<InfusePlatform<*>>()
 
     val flavor by lazy {
         Flavor.create<InfuseCommons>(
@@ -40,7 +39,7 @@ object InfuseCommons
             )
         }
 
-        flavor.bind<InfusePlatform>() to platform
+        flavor.bind<InfusePlatform<*>>() to platform
         flavor.startup()
     }
 

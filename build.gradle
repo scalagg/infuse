@@ -50,6 +50,7 @@ subprojects {
 
         compileOnly "com.github.liftgate:lease:$leaseVersion"
 
+        compileOnly "gg.scala.commons:store:$commonsVersion"
         compileOnly "gg.scala.commons:commons:$commonsVersion"
         compileOnly "gg.scala.commons:serializers:$commonsVersion"
     }

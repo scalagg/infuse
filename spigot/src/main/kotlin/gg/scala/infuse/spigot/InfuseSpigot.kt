@@ -8,6 +8,8 @@ import gg.scala.infuse.commons.InfuseCommons
 import gg.scala.infuse.commons.InfusePlatform
 import gg.scala.infuse.commons.PlatformType
 import gg.scala.infuse.commons.configuration.InfuseGeneralConfig
+import gg.scala.infuse.commons.player.PlayerService
+import gg.scala.infuse.spigot.player.SpigotPlayerService
 import me.lucko.helper.plugin.ap.Plugin
 import me.lucko.helper.plugin.ap.PluginDependency
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
@@ -29,7 +31,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences
         PluginDependency("cloudsync", soft = true)
     ]
 )
-class InfuseSpigot : ExtendedScalaPlugin(), InfusePlatform
+class InfuseSpigot : ExtendedScalaPlugin(), InfusePlatform<InfuseSpigotPlayer>
 {
     override val audience = lazy {
         BukkitAudiences.create(this)
@@ -38,6 +40,8 @@ class InfuseSpigot : ExtendedScalaPlugin(), InfusePlatform
     override val generalConfig = lazy {
         this.config<InfuseGeneralConfig>()
     }
+
+    override fun playerService() = SpigotPlayerService
 
     override val logging = this.logger!!
     override val platformType = PlatformType.Spigot

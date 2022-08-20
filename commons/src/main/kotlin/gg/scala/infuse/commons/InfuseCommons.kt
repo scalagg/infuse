@@ -17,10 +17,11 @@ object InfuseCommons
 {
     var platform by Delegates.notNull<InfusePlatform>()
 
-    val flavor = Flavor
-        .create<InfuseCommons>(
+    val flavor by lazy {
+        Flavor.create<InfuseCommons>(
             FlavorOptions(platform.logging)
         )
+    }
 
     fun configure()
     {

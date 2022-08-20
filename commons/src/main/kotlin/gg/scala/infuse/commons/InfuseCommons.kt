@@ -38,7 +38,6 @@ object InfuseCommons
         }
 
         flavor.bind<InfusePlatform>() to platform
-        flavor.bind<PackageIndexer>() to flavor.reflections
         flavor.startup()
     }
 

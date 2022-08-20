@@ -10,6 +10,7 @@ import gg.scala.flavor.service.Configure
 import gg.scala.flavor.service.Service
 import gg.scala.infuse.commons.InfusePlatform
 import gg.scala.infuse.commons.logger
+import gg.scala.infuse.commons.rank.RankCommunicator
 
 /**
  * @author GrowlyX
@@ -21,9 +22,6 @@ object CommunicationsService
     @Inject
     lateinit var platform: InfusePlatform
 
-    @Inject
-    lateinit var indexer: PackageIndexer
-
     val aware by lazy {
         AwareBuilder.of<AwareMessage>("infuse")
             .logger(platform.logging)
@@ -34,10 +32,7 @@ object CommunicationsService
     @Configure
     fun configure()
     {
-        indexer.getTypesAnnotatedWith<Communications>()
-            .forEach {
-                aware.listen(it.kotlin.objectInstance!!)
-            }
+        aware.listen(RankCommunicator)
 
         aware.connect()
             .toCompletableFuture()

@@ -21,7 +21,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences
     model = InfuseGeneralConfig::class
 )
 @Plugin(
-    name = "eureka",
+    name = "infuse",
     description = "Next-generation cross-platform network base.",
     depends = [
         PluginDependency("scala-commons"),

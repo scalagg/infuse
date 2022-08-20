@@ -19,7 +19,10 @@ object InfuseCommons
 
     val flavor by lazy {
         Flavor.create<InfuseCommons>(
-            FlavorOptions(platform.logging)
+            FlavorOptions(
+                logger = platform.logging,
+                `package` = "gg.scala.infuse.commons"
+            )
         )
     }
 

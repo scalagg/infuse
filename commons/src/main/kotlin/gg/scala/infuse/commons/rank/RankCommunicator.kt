@@ -16,6 +16,6 @@ object RankCommunicator
     )
     {
         RankService.reload().join()
-        LeaseDependency.invalidate(Rank::class)
+        LeaseDependency.invalidate(InfuseRank::class)
     }
 }

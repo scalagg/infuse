@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture
  * @author GrowlyX
  * @since 6/26/2022
  */
-data class Rank(
+data class InfuseRank(
     override val identifier: UUID
 ) : IDataStoreObject
 {
@@ -42,7 +42,7 @@ data class Rank(
         return this.container.metadata<T>().value
     }
 
-    inline fun <reified T : RankMetadata<U>, U> updateMetadata(value: U): Rank
+    inline fun <reified T : RankMetadata<U>, U> updateMetadata(value: U): InfuseRank
     {
         this.container.metadata<T>().value = value
         return this
@@ -85,7 +85,7 @@ data class Rank(
 
     private fun save(): CompletableFuture<Void>
     {
-        return DataStoreObjectControllerCache.findNotNull<Rank>()
+        return DataStoreObjectControllerCache.findNotNull<InfuseRank>()
             .save(this, DataStoreStorageType.MONGO)
     }
 

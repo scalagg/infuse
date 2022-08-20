@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Service
 object RankService
 {
-    private val ranks = ConcurrentHashMap<UUID, Rank>()
+    private val ranks = ConcurrentHashMap<UUID, InfuseRank>()
 
     @Suppress("UNCHECKED_CAST")
     private val defaults = InfuseCommons
@@ -43,7 +43,7 @@ object RankService
     @Configure
     fun configure()
     {
-        DataStoreObjectControllerCache.create<Rank>()
+        DataStoreObjectControllerCache.create<InfuseRank>()
 
         this.reload().join()
 
@@ -61,18 +61,18 @@ object RankService
     @Close
     fun close() = this.ranks.clear()
 
-    fun findDefaultRank(): Rank =
+    fun findDefaultRank(): InfuseRank =
         this.findDefaultRankNullable()!!
 
-    fun findDefaultRankNullable(): Rank? =
+    fun findDefaultRankNullable(): InfuseRank? =
         this.ranks.values
             .find {
                 it.metadata<DefaultRankMetadata, Boolean>()
             }
 
-    fun createNewRank(name: String): CompletableFuture<Rank>
+    fun createNewRank(name: String): CompletableFuture<InfuseRank>
     {
-        val rank = Rank(UUID.randomUUID())
+        val rank = InfuseRank(UUID.randomUUID())
             .updateMetadata<NameMetadata, String>(name)
 
         this.configureDefaultMeta(rank)
@@ -81,7 +81,7 @@ object RankService
             .thenApply { rank }
     }
 
-    fun configureDefaultMeta(rank: Rank)
+    fun configureDefaultMeta(rank: InfuseRank)
     {
         rank.container.registerDefaults(
             *defaults.map { it.kotlin }.toTypedArray()
@@ -91,7 +91,7 @@ object RankService
     // TODO: invalidate lease cache on new rank creation/update
     val sortedRankFormat by lease(
         strategy = LeaseStrategy.Compute,
-        dependencies = listOf(Rank::class)
+        dependencies = listOf(InfuseRank::class)
     ) {
         val component = Component.empty()
         val ranks = ranks.values
@@ -120,7 +120,7 @@ object RankService
         component
     }
 
-    fun findRank(uuid: UUID): Rank?
+    fun findRank(uuid: UUID): InfuseRank?
     {
         return ranks.values
             .firstOrNull {
@@ -128,7 +128,7 @@ object RankService
             }
     }
 
-    fun findRank(name: String): Rank?
+    fun findRank(name: String): InfuseRank?
     {
         return ranks.values
             .firstOrNull {
@@ -140,7 +140,7 @@ object RankService
     fun reload(): CompletableFuture<Void>
     {
         return DataStoreObjectControllerCache
-            .findNotNull<Rank>()
+            .findNotNull<InfuseRank>()
             .loadAll(DataStoreStorageType.MONGO)
             .thenAccept { entries ->
                 this.ranks.clear()

@@ -1,6 +1,6 @@
 package gg.scala.infuse.commons.reference.impl
 
-import gg.scala.infuse.commons.rank.Rank
+import gg.scala.infuse.commons.rank.InfuseRank
 import gg.scala.infuse.commons.rank.RankService
 import gg.scala.infuse.commons.reference.Reference
 import java.util.*
@@ -11,7 +11,7 @@ import java.util.*
  */
 class RankReference(
     override val original: UUID
-) : Reference<UUID, Rank>
+) : Reference<UUID, InfuseRank>
 {
     override fun getAbstractType() = Reference::class.java
 

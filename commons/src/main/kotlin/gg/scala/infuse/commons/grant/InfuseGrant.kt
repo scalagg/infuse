@@ -8,7 +8,7 @@ import java.util.*
  * @author GrowlyX
  * @since 6/26/2022
  */
-class Grant(
+class InfuseGrant(
     identifier: UUID,
     appliedTo: UUID,
     appliedBy: UUID,
